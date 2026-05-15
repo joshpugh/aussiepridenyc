@@ -1,11 +1,14 @@
 import { ImageResponse } from "next/og";
+import { loadGreatVibes } from "@/lib/og-fonts";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const alt = "Aussie Pride NYC 2026 — March with us at NYC Pride";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function OG() {
+  const greatVibes = await loadGreatVibes();
+
   return new ImageResponse(
     (
       <div
@@ -22,24 +25,39 @@ export default async function OG() {
           fontFamily: "system-ui, sans-serif",
         }}
       >
-        <div style={{ display: "flex", fontSize: 28, letterSpacing: 4, opacity: 0.95 }}>
+        <div
+          style={{
+            display: "flex",
+            fontSize: 28,
+            letterSpacing: 4,
+            opacity: 0.95,
+            fontWeight: 600,
+          }}
+        >
           SUNDAY 28 JUNE 2026
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <div
             style={{
-              fontSize: 130,
-              fontWeight: 900,
-              letterSpacing: -3,
-              lineHeight: 1,
+              fontSize: 220,
+              fontFamily: "GreatVibes",
+              lineHeight: 1.05,
               display: "flex",
               flexDirection: "column",
+              marginLeft: -10,
             }}
           >
             <div style={{ display: "flex" }}>March with us</div>
-            <div style={{ display: "flex" }}>at NYC Pride.</div>
+            <div style={{ display: "flex" }}>at NYC Pride</div>
           </div>
-          <div style={{ fontSize: 36, marginTop: 24, display: "flex", opacity: 0.95 }}>
+          <div
+            style={{
+              fontSize: 36,
+              marginTop: 12,
+              display: "flex",
+              opacity: 0.95,
+            }}
+          >
             🦘 🐨 🏄 🪃 ☀️ 🏳️‍🌈
           </div>
         </div>
@@ -48,18 +66,27 @@ export default async function OG() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "flex-end",
-            fontSize: 24,
+            fontSize: 22,
+            fontWeight: 500,
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <div style={{ display: "flex", opacity: 0.85 }}>aussiepridenyc.com</div>
-          </div>
-          <div style={{ display: "flex", opacity: 0.85 }}>
+          <div style={{ display: "flex", opacity: 0.9 }}>aussiepridenyc.com</div>
+          <div style={{ display: "flex", opacity: 0.9 }}>
             America Josh · Consulate-General · AAA
           </div>
         </div>
       </div>
     ),
-    size,
+    {
+      ...size,
+      fonts: [
+        {
+          name: "GreatVibes",
+          data: greatVibes,
+          style: "normal",
+          weight: 400,
+        },
+      ],
+    },
   );
 }

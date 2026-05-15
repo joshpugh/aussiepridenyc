@@ -15,13 +15,13 @@ export function SiteFooter() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={p.name}
-              className="flex items-center justify-center h-16 opacity-80 hover:opacity-100 transition-opacity"
+              className="flex items-center justify-center h-24 opacity-80 hover:opacity-100 transition-opacity"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={p.logo}
                 alt={p.name}
-                className="max-h-12 max-w-[200px] w-auto h-auto object-contain"
+                className="max-h-20 max-w-[240px] w-auto h-auto object-contain"
               />
             </a>
           ))}

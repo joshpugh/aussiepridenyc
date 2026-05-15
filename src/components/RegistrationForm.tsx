@@ -14,7 +14,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="w-full font-display text-lg uppercase tracking-wider bg-pink-dark text-white py-4 px-8 rounded-full hover:bg-pink transition-colors shadow-lg shadow-pink/30 disabled:opacity-60 disabled:cursor-wait"
+      className="w-full text-base uppercase tracking-wider font-semibold bg-pink-dark text-white py-4 px-8 rounded-full hover:bg-pink transition-colors shadow-lg shadow-pink/30 disabled:opacity-60 disabled:cursor-wait"
     >
       {pending ? "Registering…" : "Count me in!"}
     </button>
@@ -42,7 +42,7 @@ export function RegistrationForm({
       className="bg-white rounded-3xl shadow-xl shadow-pink/20 p-6 sm:p-10 space-y-6"
     >
       <div className="space-y-1">
-        <h3 className="font-display text-3xl text-pink-dark">Register to march</h3>
+        <h3 className="font-display text-5xl text-pink-dark leading-none">Register to march</h3>
         <p className="text-sm text-foreground/70">
           Spots are strictly limited. Registration closes 1 May 2026 (or when we hit our cap).
         </p>
@@ -98,7 +98,7 @@ export function RegistrationForm({
       </div>
 
       <fieldset className="space-y-3">
-        <legend className="font-display text-xl text-pink-dark">
+        <legend className="font-display text-3xl text-pink-dark leading-none">
           Optional dance rehearsals
         </legend>
         <p className="text-sm text-foreground/70">
@@ -204,7 +204,7 @@ function SuccessPanel({
       <p className="text-5xl" aria-hidden>
         🦘
       </p>
-      <h3 className="font-display text-3xl text-pink-dark">
+      <h3 className="font-display text-5xl text-pink-dark leading-none">
         {state.marchStatus === "waitlist"
           ? `Onya ${firstName} — you're on the waitlist`
           : `You're in, ${firstName}!`}

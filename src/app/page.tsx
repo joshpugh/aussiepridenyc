@@ -50,7 +50,7 @@ export default async function Home() {
 
       <section id="about" className="bg-white">
         <div className="max-w-3xl mx-auto px-6 py-20 text-center">
-          <h2 className="font-display text-4xl sm:text-5xl text-pink-dark mb-6">
+          <h2 className="font-display text-6xl sm:text-7xl text-pink-dark mb-6 leading-none">
             We&rsquo;re going bigger this year.
           </h2>
           <p className="text-lg text-foreground/80 mb-4 leading-relaxed">
@@ -68,7 +68,7 @@ export default async function Home() {
 
       <section className="bg-aussie-gradient-soft">
         <div className="max-w-4xl mx-auto px-6 py-20">
-          <h2 className="font-display text-4xl sm:text-5xl text-pink-dark text-center mb-4">
+          <h2 className="font-display text-6xl sm:text-7xl text-pink-dark text-center mb-4 leading-none">
             Free dance rehearsals
           </h2>
           <p className="text-center text-foreground/80 max-w-2xl mx-auto mb-10">
@@ -82,7 +82,7 @@ export default async function Home() {
                 key={r.id}
                 className="bg-white/80 backdrop-blur rounded-2xl p-6 text-center"
               >
-                <p className="font-display text-xl text-pink-dark mb-1">
+                <p className="font-display text-3xl text-pink-dark leading-none mb-2">
                   {r.label}
                 </p>
                 <p className="text-foreground/80 text-sm mb-3">{r.time}</p>
@@ -111,7 +111,7 @@ export default async function Home() {
 
       <section className="bg-aussie-gradient-soft">
         <div className="max-w-3xl mx-auto px-6 py-20">
-          <h2 className="font-display text-4xl text-pink-dark text-center mb-10">
+          <h2 className="font-display text-6xl sm:text-7xl text-pink-dark text-center mb-10 leading-none">
             FAQ
           </h2>
           <div className="space-y-6">
@@ -160,9 +160,9 @@ export default async function Home() {
 function Faq({ q, children }: { q: string; children: React.ReactNode }) {
   return (
     <details className="bg-white/80 backdrop-blur rounded-2xl p-5 group">
-      <summary className="font-display text-lg text-pink-dark cursor-pointer list-none flex items-center justify-between">
+      <summary className="font-display text-3xl text-pink-dark leading-none cursor-pointer list-none flex items-center justify-between">
         {q}
-        <span className="ml-4 text-2xl group-open:rotate-45 transition-transform">
+        <span className="ml-4 text-2xl font-sans group-open:rotate-45 transition-transform">
           +
         </span>
       </summary>

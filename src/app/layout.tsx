@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Archivo_Black, Inter } from "next/font/google";
+import { Great_Vibes, Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SiteFooter } from "@/components/SiteFooter";
 
-const display = Archivo_Black({
+const display = Great_Vibes({
   variable: "--font-display",
   weight: "400",
   subsets: ["latin"],

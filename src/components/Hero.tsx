@@ -7,10 +7,10 @@ export function Hero({ marchCount, marchCap }: { marchCount: number; marchCap: n
     <section className="relative bg-aussie-gradient grain overflow-hidden">
       <IconBackdrop />
       <div className="relative max-w-4xl mx-auto px-6 pt-20 pb-28 sm:pt-28 sm:pb-36 text-center">
-        <p className="font-display text-sm sm:text-base uppercase tracking-[0.3em] text-white/90 mb-6 drop-shadow">
+        <p className="text-sm sm:text-base uppercase tracking-[0.3em] font-semibold text-white/90 mb-6 drop-shadow">
           {EVENT.date}
         </p>
-        <h1 className="font-display text-5xl sm:text-7xl text-white leading-[0.95] mb-6 drop-shadow-lg">
+        <h1 className="font-display text-7xl sm:text-9xl text-white mb-6 drop-shadow-lg">
           March with us
           <br />
           at NYC Pride.
@@ -23,7 +23,7 @@ export function Hero({ marchCount, marchCap }: { marchCount: number; marchCap: n
         <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
           <a
             href="#register"
-            className="font-display text-lg uppercase tracking-wider bg-white text-pink-dark py-4 px-8 rounded-full hover:bg-aussie-gold hover:text-foreground transition-colors shadow-xl shadow-pink-dark/30"
+            className="text-base uppercase tracking-wider font-semibold bg-white text-pink-dark py-4 px-8 rounded-full hover:bg-aussie-gold hover:text-foreground transition-colors shadow-xl shadow-pink-dark/30"
           >
             Register now
           </a>
