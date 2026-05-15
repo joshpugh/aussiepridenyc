@@ -56,7 +56,7 @@ export default async function Home() {
           <p className="text-lg text-foreground/80 mb-4 leading-relaxed">
             Last year, 200+ Aussies and friends-of-Aussies marched in NYC Pride.
             This year, we&rsquo;re bringing a proper float, a choreographed routine
-            from one of Eddie&rsquo;s Broadway choreographers, and (fingers crossed)
+            from one of our Broadway choreographer mates, and (fingers crossed)
             a special guest or two.
           </p>
           <p className="text-lg text-foreground/80 leading-relaxed">
