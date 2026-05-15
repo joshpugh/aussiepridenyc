@@ -1,11 +1,9 @@
-import { IconBackdrop } from "./IconBackdrop";
 import { EVENT } from "@/config/event";
 
 export function Hero({ marchCount, marchCap }: { marchCount: number; marchCap: number }) {
   const remaining = Math.max(marchCap - marchCount, 0);
   return (
     <section className="relative bg-aussie-gradient grain overflow-hidden">
-      <IconBackdrop />
       <div className="relative max-w-4xl mx-auto px-6 pt-20 pb-28 sm:pt-28 sm:pb-36 text-center">
         <p
           className="hero-rise text-sm sm:text-base uppercase tracking-[0.3em] font-semibold text-white/90 mb-6 drop-shadow"

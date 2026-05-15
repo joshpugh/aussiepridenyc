@@ -62,7 +62,7 @@ export function RegistrationForm({
       className="bg-white rounded-3xl shadow-xl shadow-pink/20 p-6 sm:p-10 space-y-6"
     >
       <div className="space-y-1">
-        <h3 className="font-display text-5xl text-pink-dark leading-none">Register to march</h3>
+        <h3 className="text-2xl sm:text-3xl font-extrabold text-pink-dark tracking-tight">Register to march</h3>
         <p className="text-sm text-foreground/70">
           Spots are strictly limited. Registration closes 1 May 2026 (or when we hit our cap).
         </p>
@@ -118,7 +118,7 @@ export function RegistrationForm({
       </div>
 
       <fieldset className="space-y-3">
-        <legend className="font-display text-3xl text-pink-dark leading-none">
+        <legend className="text-xl sm:text-2xl font-extrabold text-pink-dark tracking-tight">
           Optional dance rehearsals
         </legend>
         <p className="text-sm text-foreground/70">
@@ -227,7 +227,7 @@ function SuccessPanel({
       <p className="text-5xl" aria-hidden>
         🦘
       </p>
-      <h3 className="font-display text-5xl text-pink-dark leading-none">
+      <h3 className="text-3xl sm:text-4xl font-extrabold text-pink-dark tracking-tight">
         {state.marchStatus === "waitlist"
           ? `Onya ${firstName} — you're on the waitlist`
           : `You're in, ${firstName}!`}
