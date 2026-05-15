@@ -1,4 +1,5 @@
 import { Hero } from "@/components/Hero";
+import { EmojiMarquee } from "@/components/EmojiMarquee";
 import { RegistrationForm } from "@/components/RegistrationForm";
 import { getCounts } from "@/lib/registrations";
 import { REHEARSALS, REHEARSAL_VENUE, EVENT } from "@/config/event";
@@ -47,6 +48,8 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventLd) }}
       />
       <Hero marchCount={counts.march} marchCap={counts.marchCap} />
+
+      <EmojiMarquee />
 
       <section id="about" className="bg-white">
         <div className="max-w-3xl mx-auto px-6 py-20 text-center">
@@ -98,6 +101,8 @@ export default async function Home() {
           </p>
         </div>
       </section>
+
+      <EmojiMarquee />
 
       <section id="register" className="bg-white scroll-mt-8">
         <div className="max-w-2xl mx-auto px-6 py-20">

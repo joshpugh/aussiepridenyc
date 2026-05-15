@@ -1,4 +1,22 @@
-const ICONS = ["🦘", "🐨", "🏄", "🎩", "🪃", "☀️", "🏳️‍🌈", "🦘", "🐨", "🏄", "🎩", "🪃"];
+const ICONS = [
+  "🦘",
+  "🐨",
+  "🏄",
+  "🎩",
+  "☀️",
+  "🏳️‍🌈",
+  "🦘",
+  "🐨",
+  "🏄",
+  "🎩",
+  "🌴",
+  "✨",
+  "🪩",
+  "🌺",
+  "🦘",
+];
+
+const MOTION = ["bob", "drift", "spin", "wiggle"] as const;
 
 export function IconBackdrop() {
   return (
@@ -10,20 +28,22 @@ export function IconBackdrop() {
         const top = (i * 11.7) % 95;
         const left = (i * 17.3) % 92;
         const rotate = ((i * 47) % 70) - 35;
-        const size = 36 + ((i * 13) % 60);
-        const delay = (i * 0.4) % 3;
+        const size = 36 + ((i * 13) % 70);
+        const delay = (i * 0.37) % 4;
+        const duration = 4 + ((i * 1.7) % 5);
+        const motion = MOTION[i % MOTION.length];
         return (
           <span
             key={i}
-            className="absolute float opacity-25"
+            className={`absolute opacity-30 motion-${motion}`}
             style={{
               top: `${top}%`,
               left: `${left}%`,
               fontSize: `${size}px`,
-              transform: `rotate(${rotate}deg)`,
               ["--r" as string]: `${rotate}deg`,
               animationDelay: `${delay}s`,
-              filter: "saturate(0.7) brightness(0.95)",
+              animationDuration: `${duration}s`,
+              filter: "saturate(0.8) brightness(1)",
             }}
           >
             {icon}

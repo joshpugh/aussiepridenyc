@@ -37,10 +37,29 @@ body {
 
 .bg-aussie-gradient {
   background:
-    radial-gradient(ellipse at 20% 20%, #ff7eb3 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 15%, #ffb37e 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 90%, #ff5e7a 0%, transparent 60%),
-    linear-gradient(135deg, #ff2d92 0%, #ff6b47 100%);
+    radial-gradient(ellipse at var(--g1x, 20%) var(--g1y, 20%), #ff7eb3 0%, transparent 55%),
+    radial-gradient(ellipse at var(--g2x, 85%) var(--g2y, 15%), #ffb37e 0%, transparent 50%),
+    radial-gradient(ellipse at var(--g3x, 50%) var(--g3y, 90%), #ff5e7a 0%, transparent 60%),
+    linear-gradient(var(--g-angle, 135deg), #ff2d92 0%, #ff6b47 100%);
+  --g1x: 20%; --g1y: 20%;
+  --g2x: 85%; --g2y: 15%;
+  --g3x: 50%; --g3y: 90%;
+  --g-angle: 135deg;
+  animation: gradient-drift 18s ease-in-out infinite alternate;
+}
+
+@property --g1x { syntax: "<percentage>"; inherits: false; initial-value: 20%; }
+@property --g1y { syntax: "<percentage>"; inherits: false; initial-value: 20%; }
+@property --g2x { syntax: "<percentage>"; inherits: false; initial-value: 85%; }
+@property --g2y { syntax: "<percentage>"; inherits: false; initial-value: 15%; }
+@property --g3x { syntax: "<percentage>"; inherits: false; initial-value: 50%; }
+@property --g3y { syntax: "<percentage>"; inherits: false; initial-value: 90%; }
+@property --g-angle { syntax: "<angle>"; inherits: false; initial-value: 135deg; }
+
+@keyframes gradient-drift {
+  0%   { --g1x: 15%;  --g1y: 25%; --g2x: 85%; --g2y: 15%; --g3x: 50%; --g3y: 90%; --g-angle: 135deg; }
+  50%  { --g1x: 30%;  --g1y: 10%; --g2x: 70%; --g2y: 35%; --g3x: 60%; --g3y: 80%; --g-angle: 160deg; }
+  100% { --g1x: 5%;   --g1y: 40%; --g2x: 95%; --g2y: 25%; --g3x: 40%; --g3y: 100%; --g-angle: 115deg; }
 }
 
 .bg-aussie-gradient-soft {
@@ -60,13 +79,61 @@ body {
   mix-blend-mode: overlay;
 }
 
-@keyframes float-slow {
+/* Floating icon variants — assign one per icon for variety */
+@keyframes motion-bob {
   0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
-  50% { transform: translateY(-12px) rotate(calc(var(--r, 0deg) + 4deg)); }
+  50%      { transform: translateY(-16px) rotate(calc(var(--r, 0deg) + 5deg)); }
+}
+@keyframes motion-drift {
+  0%   { transform: translate(-12px, 4px) rotate(var(--r, 0deg)); }
+  50%  { transform: translate(14px, -10px) rotate(calc(var(--r, 0deg) - 6deg)); }
+  100% { transform: translate(-12px, 4px) rotate(var(--r, 0deg)); }
+}
+@keyframes motion-spin {
+  0%   { transform: rotate(var(--r, 0deg)); }
+  100% { transform: rotate(calc(var(--r, 0deg) + 360deg)); }
+}
+@keyframes motion-wiggle {
+  0%, 100% { transform: rotate(calc(var(--r, 0deg) - 8deg)); }
+  50%      { transform: rotate(calc(var(--r, 0deg) + 8deg)); }
 }
 
-.float {
-  animation: float-slow 6s ease-in-out infinite;
+.motion-bob    { animation: motion-bob    var(--dur, 6s) ease-in-out infinite; }
+.motion-drift  { animation: motion-drift  var(--dur, 9s) ease-in-out infinite; }
+.motion-spin   { animation: motion-spin   var(--dur, 16s) linear      infinite; }
+.motion-wiggle { animation: motion-wiggle var(--dur, 4s) ease-in-out infinite; }
+
+@keyframes hero-rise {
+  0%   { opacity: 0; transform: translateY(24px); }
+  100% { opacity: 1; transform: translateY(0);    }
+}
+.hero-rise { animation: hero-rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 12px 32px -8px rgba(214, 28, 117, 0.45); }
+  50%      { box-shadow: 0 18px 40px -6px rgba(214, 28, 117, 0.7);  }
+}
+.pulse-glow { animation: pulse-glow 2.4s ease-in-out infinite; }
+
+/* Marching emoji marquee */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: inline-flex;
+  gap: 3rem;
+  white-space: nowrap;
+  animation: marquee 40s linear infinite;
+}
+.marquee-mask {
+  mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-bob, .motion-drift, .motion-spin, .motion-wiggle,
+  .hero-rise, .pulse-glow, .marquee-track,
+  .bg-aussie-gradient { animation: none !important; }
 }
 
 .input {

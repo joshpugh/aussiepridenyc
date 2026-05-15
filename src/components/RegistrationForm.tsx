@@ -1,12 +1,32 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
+import confetti from "canvas-confetti";
 import { registerAction, type RegisterState } from "@/app/actions";
 import { REHEARSALS, REHEARSAL_VENUE, TSHIRT_OPTIONS } from "@/config/event";
 import { Turnstile } from "./Turnstile";
 
 const initialState: RegisterState = { status: "idle" };
+
+function fireConfetti() {
+  if (typeof window === "undefined") return;
+  if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+  const colors = ["#ff2d92", "#d61c75", "#ff6b47", "#ffcd00", "#ffffff"];
+  const burst = (originX: number) => {
+    confetti({
+      particleCount: 80,
+      spread: 70,
+      startVelocity: 45,
+      origin: { x: originX, y: 0.65 },
+      colors,
+      scalar: 1.1,
+    });
+  };
+  burst(0.2);
+  setTimeout(() => burst(0.8), 180);
+  setTimeout(() => burst(0.5), 360);
+}
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -198,9 +218,12 @@ function SuccessPanel({
 }: {
   state: Extract<RegisterState, { status: "success" }>;
 }) {
+  useEffect(() => {
+    if (state.marchStatus === "confirmed") fireConfetti();
+  }, [state.marchStatus]);
   const firstName = state.name.split(" ")[0] || "mate";
   return (
-    <div className="bg-white rounded-3xl shadow-xl shadow-pink/20 p-8 sm:p-10 text-center space-y-4">
+    <div className="hero-rise bg-white rounded-3xl shadow-xl shadow-pink/20 p-8 sm:p-10 text-center space-y-4">
       <p className="text-5xl" aria-hidden>
         🦘
       </p>
