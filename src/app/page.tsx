@@ -1,65 +1,174 @@
-import Image from "next/image";
+import { Hero } from "@/components/Hero";
+import { RegistrationForm } from "@/components/RegistrationForm";
+import { getCounts } from "@/lib/registrations";
+import { REHEARSALS, REHEARSAL_VENUE, EVENT } from "@/config/event";
 
-export default function Home() {
+const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://aussiepridenyc.com";
+
+const eventLd = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  name: "Australian Contingent at NYC Pride March 2026",
+  startDate: `${EVENT.iso}T11:00:00-04:00`,
+  endDate: `${EVENT.iso}T17:00:00-04:00`,
+  eventStatus: "https://schema.org/EventScheduled",
+  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+  description:
+    "March with the Australian contingent at the NYC Pride March on Sunday 28 June 2026.",
+  location: {
+    "@type": "Place",
+    name: "NYC Pride March route",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "New York",
+      addressRegion: "NY",
+      addressCountry: "US",
+    },
+  },
+  organizer: [
+    { "@type": "Organization", name: "America Josh", url: "https://americajosh.com" },
+    { "@type": "Organization", name: "Australian Consulate-General New York" },
+    { "@type": "Organization", name: "American Australian Association" },
+  ],
+  url: SITE,
+};
+
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const counts = await getCounts();
+  const sitekey = process.env.NEXT_PUBLIC_TURNSTILE_SITEKEY;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventLd) }}
+      />
+      <Hero marchCount={counts.march} marchCap={counts.marchCap} />
+
+      <section id="about" className="bg-white">
+        <div className="max-w-3xl mx-auto px-6 py-20 text-center">
+          <h2 className="font-display text-4xl sm:text-5xl text-pink-dark mb-6">
+            We&rsquo;re going bigger this year.
+          </h2>
+          <p className="text-lg text-foreground/80 mb-4 leading-relaxed">
+            Last year, 200+ Aussies and friends-of-Aussies marched in NYC Pride.
+            This year, we&rsquo;re bringing a proper float, a choreographed routine
+            from one of Eddie&rsquo;s Broadway choreographers, and (fingers crossed)
+            a special guest or two.
+          </p>
+          <p className="text-lg text-foreground/80 leading-relaxed">
+            Spots are capped at 200 per NYC Pride. Register your interest below
+            to secure yours.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <section className="bg-aussie-gradient-soft">
+        <div className="max-w-4xl mx-auto px-6 py-20">
+          <h2 className="font-display text-4xl sm:text-5xl text-pink-dark text-center mb-4">
+            Free dance rehearsals
+          </h2>
+          <p className="text-center text-foreground/80 max-w-2xl mx-auto mb-10">
+            Optional but highly recommended. Three weekly classes in the lead-up,
+            led by a Broadway-credited choreographer. Stick around for a drink
+            with your fellow dancers afterwards.
+          </p>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {REHEARSALS.map((r) => (
+              <div
+                key={r.id}
+                className="bg-white/80 backdrop-blur rounded-2xl p-6 text-center"
+              >
+                <p className="font-display text-xl text-pink-dark mb-1">
+                  {r.label}
+                </p>
+                <p className="text-foreground/80 text-sm mb-3">{r.time}</p>
+                <p className="text-xs text-foreground/70">
+                  Arrive {r.arriveBy}
+                </p>
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-sm text-foreground/70 mt-6">
+            All classes at the {REHEARSAL_VENUE.name},
+            <br className="sm:hidden" /> {REHEARSAL_VENUE.address}
+          </p>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <section id="register" className="bg-white scroll-mt-8">
+        <div className="max-w-2xl mx-auto px-6 py-20">
+          <RegistrationForm
+            turnstileSitekey={sitekey}
+            rehearsalCounts={counts.rehearsals}
+            rehearsalCap={counts.rehearsalCap}
+          />
+        </div>
+      </section>
+
+      <section className="bg-aussie-gradient-soft">
+        <div className="max-w-3xl mx-auto px-6 py-20">
+          <h2 className="font-display text-4xl text-pink-dark text-center mb-10">
+            FAQ
+          </h2>
+          <div className="space-y-6">
+            <Faq q="When and where?">
+              {EVENT.date}. NYC Pride March kicks off in midtown Manhattan and
+              winds down 5th Avenue. Exact step-off time and meeting point will
+              be confirmed closer to the day.
+            </Faq>
+            <Faq q="What's the t-shirt situation?">
+              Per NYC Pride guidelines, marchers must wear an event t-shirt.
+              We&rsquo;ll provide one free of charge — your size goes on the
+              registration form. Last year&rsquo;s &ldquo;G&rsquo;Day&rdquo; tees
+              were popular, so we&rsquo;re aiming to top them.
+            </Faq>
+            <Faq q="Do I have to come to dance rehearsals?">
+              Nope, totally optional. The march is the main event — rehearsals
+              are for the people who want to do the choreographed routine on the
+              float. Even if you sign up for class, you&rsquo;re still marching
+              with us either way.
+            </Faq>
+            <Faq q="Can I bring friends?">
+              Absolutely — every friend needs to register individually so we can
+              count them toward our 200-person cap and get them a t-shirt in their
+              size.
+            </Faq>
+            <Faq q="Who's running this?">
+              A team of three: <a className="text-pink-dark underline-offset-2 hover:underline" href="https://americajosh.com" target="_blank" rel="noopener">America Josh</a>, the Australian Consulate-General in New York, and the American Australian Association. With a major sponsor to be announced.
+            </Faq>
+            <Faq q="I want to sponsor / I have questions">
+              Email us at{" "}
+              <a
+                className="text-pink-dark underline-offset-2 hover:underline"
+                href={`mailto:${EVENT.contactEmail}`}
+              >
+                {EVENT.contactEmail}
+              </a>
+              .
+            </Faq>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function Faq({ q, children }: { q: string; children: React.ReactNode }) {
+  return (
+    <details className="bg-white/80 backdrop-blur rounded-2xl p-5 group">
+      <summary className="font-display text-lg text-pink-dark cursor-pointer list-none flex items-center justify-between">
+        {q}
+        <span className="ml-4 text-2xl group-open:rotate-45 transition-transform">
+          +
+        </span>
+      </summary>
+      <div className="mt-3 text-foreground/80 text-[0.95rem] leading-relaxed">
+        {children}
+      </div>
+    </details>
   );
 }
