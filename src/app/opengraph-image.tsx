@@ -39,12 +39,12 @@ export default async function OG() {
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <div
             style={{
-              fontSize: 220,
+              fontSize: 140,
               fontFamily: "GreatVibes",
-              lineHeight: 1.05,
+              lineHeight: 1,
               display: "flex",
               flexDirection: "column",
-              marginLeft: -10,
+              marginLeft: -6,
             }}
           >
             <div style={{ display: "flex" }}>March with us</div>
@@ -52,8 +52,8 @@ export default async function OG() {
           </div>
           <div
             style={{
-              fontSize: 36,
-              marginTop: 12,
+              fontSize: 32,
+              marginTop: 24,
               display: "flex",
               opacity: 0.95,
             }}
