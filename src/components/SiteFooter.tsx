@@ -58,6 +58,19 @@ export function SiteFooter() {
               {EVENT.contactEmail}
             </a>
           </p>
+          <p className="pt-2">
+            Website made with{" "}
+            <span aria-label="love" className="text-pink-dark">♥</span>{" "}
+            by{" "}
+            <a
+              href="https://fortnight.digital"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-pink-dark underline-offset-2 hover:underline"
+            >
+              Fortnight.digital
+            </a>
+          </p>
         </div>
       </div>
     </footer>
