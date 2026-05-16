@@ -17,7 +17,7 @@ export function Hero({ marchCount, marchCap }: { marchCount: number; marchCap: n
           className="hero-rise font-display text-6xl sm:text-8xl text-white mb-6 drop-shadow-lg"
           style={{ animationDelay: "0.15s" }}
         >
-          March with us
+          March with Australia
           <br />
           at NYC Pride.
         </h1>

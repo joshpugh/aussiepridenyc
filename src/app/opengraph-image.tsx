@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { loadDancingScript } from "@/lib/og-fonts";
 
 export const runtime = "nodejs";
-export const alt = "Aussie Pride NYC 2026 — March with us at NYC Pride";
+export const alt = "Aussie Pride NYC 2026 — March with Australia at NYC Pride";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -48,7 +48,7 @@ export default async function OG() {
               marginLeft: -6,
             }}
           >
-            <div style={{ display: "flex" }}>March with us</div>
+            <div style={{ display: "flex" }}>March with Australia</div>
             <div style={{ display: "flex" }}>at NYC Pride</div>
           </div>
           <div

@@ -29,7 +29,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://aussiepridenyc.com
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Aussie Pride NYC 2026 — March with us at NYC Pride",
+    default: "Aussie Pride NYC 2026 — March with Australia at NYC Pride",
     template: "%s · Aussie Pride NYC",
   },
   description:
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     "America Josh",
   ],
   openGraph: {
-    title: "Aussie Pride NYC 2026 — March with us at NYC Pride",
+    title: "Aussie Pride NYC 2026 — March with Australia at NYC Pride",
     description:
       "Register to march with the Australian contingent at the NYC Pride March, Sunday 28 June 2026.",
     url: SITE_URL,
