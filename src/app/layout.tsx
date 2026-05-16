@@ -1,14 +1,22 @@
 import type { Metadata } from "next";
-import { Great_Vibes, Inter } from "next/font/google";
+import { Great_Vibes, Inter, Fraunces } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SiteFooter } from "@/components/SiteFooter";
+import { FontPicker } from "@/components/FontPicker";
 
 const display = Great_Vibes({
   variable: "--font-display",
   weight: "400",
   subsets: ["latin"],
   display: "swap",
+});
+
+const serif = Fraunces({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  display: "swap",
+  axes: ["SOFT", "WONK", "opsz"],
 });
 
 const body = Inter({
@@ -61,11 +69,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${body.variable} h-full antialiased`}
+      className={`${display.variable} ${serif.variable} ${body.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <main className="flex-1">{children}</main>
         <SiteFooter />
+        <FontPicker />
         <Analytics />
       </body>
     </html>

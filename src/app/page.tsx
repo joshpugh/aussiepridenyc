@@ -111,14 +111,44 @@ export default async function Home() {
 
       <section className="bg-aussie-gradient-soft">
         <div className="max-w-3xl mx-auto px-6 py-20">
-          <h2 className="font-display text-6xl sm:text-7xl text-pink-dark text-center mb-10 leading-none">
-            FAQ
+          <h2 className="font-serif text-4xl sm:text-5xl text-pink-dark text-center mb-10 leading-tight">
+            Frequently Asked Questions
           </h2>
-          <div className="space-y-6">
-            <Faq q="When and where?">
-              {EVENT.date}. NYC Pride March kicks off in midtown Manhattan and
-              winds down 5th Avenue. Exact step-off time and meeting point will
-              be confirmed closer to the day.
+          <div className="space-y-4">
+            <Faq q="When does the march start?">
+              {EVENT.date}. NYC Pride traditionally steps off around noon, with
+              assembly a couple of hours before. We&rsquo;ll email every
+              registered marcher the exact step-off time and assembly window
+              once NYC Pride confirms in the weeks before.
+            </Faq>
+            <Faq q="Where does it start?">
+              NYC Pride assembles in midtown Manhattan — historically around
+              25th Street &amp; 5th Avenue — and heads south down 5th Avenue.
+              The Aussie contingent has its own meeting point within the
+              assembly area; you&rsquo;ll get the exact corner (with a map) by
+              email the week of the march.
+            </Faq>
+            <Faq q="How long does the whole thing take?">
+              Block out the afternoon. Assembly and wait time can run a couple
+              of hours, the march itself is around 2 hours, and most of us end
+              up at the official Aussie post-march pub afterwards (TBA closer
+              to the day). Plan for a full day out.
+            </Faq>
+            <Faq q="How far is the march?">
+              About 2.5 miles (4 km). 5th Avenue south from midtown, through
+              the Village, ending in the West Village near Christopher Street
+              and Stonewall. It&rsquo;s flat and slow-paced — more of a long
+              celebratory stroll than a hike.
+            </Faq>
+            <Faq q="What should I wear and bring?">
+              <ul className="list-disc pl-5 space-y-1">
+                <li>Your free Aussie Pride tee — handed out at assembly</li>
+                <li>Comfortable shoes you can stand and walk in for hours</li>
+                <li>Sun protection: hat, sunscreen, sunnies (late June NYC = hot)</li>
+                <li>A refillable water bottle</li>
+                <li>A light layer in case it cools off after</li>
+                <li>Any Aussie flair you&rsquo;ve got — flags, glitter, vibes</li>
+              </ul>
             </Faq>
             <Faq q="What's the t-shirt situation?">
               Per NYC Pride guidelines, marchers must wear an event t-shirt.
@@ -127,15 +157,23 @@ export default async function Home() {
               were popular, so we&rsquo;re aiming to top them.
             </Faq>
             <Faq q="Do I have to come to dance rehearsals?">
-              Nope, totally optional. The march is the main event — rehearsals
-              are for the people who want to do the choreographed routine on the
-              float. Even if you sign up for class, you&rsquo;re still marching
-              with us either way.
+              You don&rsquo;t <em>have</em> to — but you&rsquo;ll want to. The
+              choreographed routine on the float is the visual centrepiece of
+              our section, and rehearsals are how it comes together. Classes
+              are free, the choreographer is Broadway-credited, there&rsquo;s
+              a drink with the crew after each one, and you&rsquo;ll spend
+              three Wednesday evenings meeting other Aussies before march day.
+              Come to one and we reckon you&rsquo;ll be back for all three.
             </Faq>
             <Faq q="Can I bring friends?">
               Absolutely — every friend needs to register individually so we can
               count them toward our 200-person cap and get them a t-shirt in their
               size.
+            </Faq>
+            <Faq q="Do I have to be Australian?">
+              Not at all. Aussies, Kiwis, friends-of-Aussies, family,
+              partners, anyone with a soft spot for the Southern Hemisphere —
+              all welcome. The more the merrier.
             </Faq>
             <Faq q="Who's running this?">
               A team of three: <a className="text-pink-dark underline-offset-2 hover:underline" href="https://americajosh.com" target="_blank" rel="noopener">America Josh</a>, the Australian Consulate-General in New York, and the American Australian Association. With a major sponsor to be announced.

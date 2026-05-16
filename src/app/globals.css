@@ -12,6 +12,7 @@
   --color-aussie-green: #00843d;
   --font-sans: var(--font-body);
   --font-display: var(--font-display);
+  --font-serif: var(--font-serif);
 }
 
 html, body {
@@ -33,6 +34,13 @@ body {
 /* Great Vibes is delicate — give it room and a little stroke definition */
 .font-display.text-pink-dark {
   text-shadow: 0 1px 0 rgba(214, 28, 117, 0.04);
+}
+
+.font-serif {
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-feature-settings: "ss01", "ss02";
+  letter-spacing: -0.02em;
+  font-weight: 600;
 }
 
 .bg-aussie-gradient {
