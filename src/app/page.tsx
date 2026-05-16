@@ -176,7 +176,19 @@ export default async function Home() {
               all welcome. The more the merrier.
             </Faq>
             <Faq q="Who's running this?">
-              A team of three: <a className="text-pink-dark underline-offset-2 hover:underline" href="https://americajosh.com" target="_blank" rel="noopener">America Josh</a>, the Australian Consulate-General in New York, and the American Australian Association. With a major sponsor to be announced.
+              A team of three:{" "}
+              <a className="text-pink-dark underline-offset-2 hover:underline" href="https://americajosh.com" target="_blank" rel="noopener">
+                America Josh
+              </a>
+              , the{" "}
+              <a className="text-pink-dark underline-offset-2 hover:underline" href="https://usa.embassy.gov.au/our-locations" target="_blank" rel="noopener">
+                Australian Consulate-General in New York
+              </a>
+              , and the{" "}
+              <a className="text-pink-dark underline-offset-2 hover:underline" href="https://americanaustralian.org/" target="_blank" rel="noopener">
+                American Australian Association
+              </a>
+              . With a major sponsor to be announced.
             </Faq>
             <Faq q="I want to sponsor / I have questions">
               Email us at{" "}

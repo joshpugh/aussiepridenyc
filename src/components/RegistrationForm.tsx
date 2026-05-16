@@ -62,7 +62,7 @@ export function RegistrationForm({
       className="bg-white rounded-3xl shadow-xl shadow-pink/20 p-6 sm:p-10 space-y-6"
     >
       <div className="space-y-1">
-        <h3 className="text-2xl sm:text-3xl font-extrabold text-pink-dark tracking-tight">Register to march</h3>
+        <h3 className="font-serif text-3xl sm:text-4xl text-pink-dark leading-tight">Register to march</h3>
         <p className="text-sm text-foreground/70">
           Spots are strictly limited. Registration closes 1 May 2026 (or when we hit our cap).
         </p>
