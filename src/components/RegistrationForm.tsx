@@ -1,11 +1,20 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import confetti from "canvas-confetti";
 import { registerAction, type RegisterState } from "@/app/actions";
 import { REHEARSALS, REHEARSAL_VENUE, TSHIRT_OPTIONS } from "@/config/event";
 import { Turnstile } from "./Turnstile";
+
+/** Format raw input as US-style (XXX) XXX-XXXX as the user types. */
+function formatPhone(value: string): string {
+  const digits = value.replace(/\D/g, "").slice(0, 10);
+  if (digits.length === 0) return "";
+  if (digits.length <= 3) return `(${digits}`;
+  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
 
 const initialState: RegisterState = { status: "idle" };
 
@@ -51,6 +60,7 @@ export function RegistrationForm({
   rehearsalCap: number;
 }) {
   const [state, formAction] = useActionState(registerAction, initialState);
+  const [phone, setPhone] = useState("");
 
   if (state.status === "success") {
     return <SuccessPanel state={state} />;
@@ -99,7 +109,10 @@ export function RegistrationForm({
             type="tel"
             required
             autoComplete="tel"
-            placeholder="+1 555 123 4567"
+            inputMode="numeric"
+            placeholder="(917) 123-4567"
+            value={phone}
+            onChange={(e) => setPhone(formatPhone(e.target.value))}
             className="input"
           />
         </Field>
