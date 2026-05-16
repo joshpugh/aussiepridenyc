@@ -34,21 +34,46 @@ export const REHEARSAL_VENUE = {
   address: "150 E 42nd Street, Floor 34, New York, NY 10017",
 } as const;
 
-export const PARTNERS = [
+export type PartnerSocial = {
+  network: "instagram" | "facebook" | "linkedin";
+  href: string;
+};
+
+export const PARTNERS: {
+  name: string;
+  href: string;
+  logo: string;
+  socials: PartnerSocial[];
+}[] = [
   {
     name: "America Josh",
     href: "https://americajosh.com",
     logo: "/partners/america-josh.svg",
+    socials: [
+      { network: "instagram", href: "https://www.instagram.com/americajosh" },
+      { network: "facebook", href: "https://facebook.com/americajosh" },
+      { network: "linkedin", href: "https://www.linkedin.com/company/americajosh/" },
+    ],
   },
   {
     name: "Australian Consulate-General New York",
-    href: "https://newyork.consulate.gov.au",
+    href: "https://usa.embassy.gov.au/our-locations",
     logo: "/partners/consulate.svg",
+    socials: [
+      { network: "instagram", href: "https://www.instagram.com/ausconsulateny/" },
+      { network: "facebook", href: "https://facebook.com/australianconsulategeneralnyc/" },
+      { network: "linkedin", href: "https://www.linkedin.com/showcase/ausconsulateny/" },
+    ],
   },
   {
     name: "American Australian Association",
-    href: "https://americanaustralian.org",
+    href: "https://americanaustralian.org/",
     logo: "/partners/aaa.svg",
+    socials: [
+      { network: "instagram", href: "https://www.instagram.com/_aaausa/" },
+      { network: "facebook", href: "https://www.facebook.com/americanaustralian" },
+      { network: "linkedin", href: "https://www.linkedin.com/company/american-australian-association" },
+    ],
   },
 ];
 

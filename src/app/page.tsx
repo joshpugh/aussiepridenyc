@@ -50,7 +50,7 @@ export default async function Home() {
 
       <section id="about" className="bg-white">
         <div className="max-w-3xl mx-auto px-6 py-20 text-center">
-          <h2 className="font-display text-6xl sm:text-7xl text-pink-dark mb-6 leading-none">
+          <h2 className="font-serif text-4xl sm:text-5xl text-pink-dark mb-6 leading-tight">
             We&rsquo;re going bigger this year.
           </h2>
           <p className="text-lg text-foreground/80 mb-4 leading-relaxed">
@@ -68,7 +68,7 @@ export default async function Home() {
 
       <section className="bg-aussie-gradient-soft">
         <div className="max-w-4xl mx-auto px-6 py-20">
-          <h2 className="font-display text-6xl sm:text-7xl text-pink-dark text-center mb-4 leading-none">
+          <h2 className="font-serif text-4xl sm:text-5xl text-pink-dark text-center mb-4 leading-tight">
             Free dance rehearsals
           </h2>
           <p className="text-center text-foreground/80 max-w-2xl mx-auto mb-10">

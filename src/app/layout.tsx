@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Great_Vibes, Inter, Fraunces } from "next/font/google";
+import { Dancing_Script, Inter, Fraunces } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SiteFooter } from "@/components/SiteFooter";
-import { FontPicker } from "@/components/FontPicker";
 
-const display = Great_Vibes({
+const display = Dancing_Script({
   variable: "--font-display",
-  weight: "400",
+  weight: ["600", "700"],
   subsets: ["latin"],
   display: "swap",
 });
@@ -74,7 +73,6 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <main className="flex-1">{children}</main>
         <SiteFooter />
-        <FontPicker />
         <Analytics />
       </body>
     </html>

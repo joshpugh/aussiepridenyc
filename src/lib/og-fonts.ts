@@ -1,16 +1,20 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-let cachedGreatVibes: ArrayBuffer | null = null;
+let cachedDancingScript: ArrayBuffer | null = null;
 
-export async function loadGreatVibes(): Promise<ArrayBuffer> {
-  if (cachedGreatVibes) return cachedGreatVibes;
+export async function loadDancingScript(): Promise<ArrayBuffer> {
+  if (cachedDancingScript) return cachedDancingScript;
+  // Fontsource ships static-weight .woff files (satori chokes on variable TTFs).
   const file = await readFile(
-    path.join(process.cwd(), "src/fonts/GreatVibes-Regular.ttf"),
+    path.join(
+      process.cwd(),
+      "node_modules/@fontsource/dancing-script/files/dancing-script-latin-700-normal.woff",
+    ),
   );
-  cachedGreatVibes = file.buffer.slice(
+  cachedDancingScript = file.buffer.slice(
     file.byteOffset,
     file.byteOffset + file.byteLength,
   ) as ArrayBuffer;
-  return cachedGreatVibes;
+  return cachedDancingScript;
 }

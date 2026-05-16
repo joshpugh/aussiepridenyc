@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { loadGreatVibes } from "@/lib/og-fonts";
+import { loadDancingScript } from "@/lib/og-fonts";
 
 export const runtime = "nodejs";
 export const alt = "Aussie Pride NYC 2026 — March with us at NYC Pride";
@@ -7,7 +7,7 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function OG() {
-  const greatVibes = await loadGreatVibes();
+  const dancingScript = await loadDancingScript();
 
   return new ImageResponse(
     (
@@ -39,9 +39,10 @@ export default async function OG() {
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <div
             style={{
-              fontSize: 140,
-              fontFamily: "GreatVibes",
+              fontSize: 130,
+              fontFamily: "DancingScript",
               lineHeight: 1,
+              fontWeight: 700,
               display: "flex",
               flexDirection: "column",
               marginLeft: -6,
@@ -81,10 +82,10 @@ export default async function OG() {
       ...size,
       fonts: [
         {
-          name: "GreatVibes",
-          data: greatVibes,
+          name: "DancingScript",
+          data: dancingScript,
           style: "normal",
-          weight: 400,
+          weight: 700,
         },
       ],
     },

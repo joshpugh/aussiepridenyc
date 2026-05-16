@@ -14,7 +14,7 @@ export function Hero({ marchCount, marchCap }: { marchCount: number; marchCap: n
           {EVENT.date}
         </p>
         <h1
-          className="hero-rise font-display text-7xl sm:text-9xl text-white mb-6 drop-shadow-lg"
+          className="hero-rise font-display text-6xl sm:text-8xl text-white mb-6 drop-shadow-lg"
           style={{ animationDelay: "0.15s" }}
         >
           March with us
