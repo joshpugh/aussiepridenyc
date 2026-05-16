@@ -196,8 +196,8 @@ export function RegistrationForm({
       <SubmitButton />
 
       <p className="text-xs text-foreground/60 text-center">
-        By registering you consent to receiving event-related emails from us. We won&rsquo;t
-        share your details with anyone outside the organising team.
+        By registering you consent to receiving emails from the organizing team.
+        We won&rsquo;t share your details.
       </p>
     </form>
   );

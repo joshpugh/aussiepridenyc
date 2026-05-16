@@ -173,7 +173,7 @@ function renderConfirmationEmail(data: ConfirmationData) {
           Dance rehearsals
         </h3>
         <p style="margin: 0; font-size: 15px; color: ${COLOR.text}; line-height: 1.5;">
-          You didn't opt in to rehearsals — no worries. If you change your mind, the choreographed routine on the float is the visual centrepiece of our section, classes are free, and there's a drink with the crew after each one. Reply to this email and we'll add you.
+          You didn't opt in to rehearsals — no worries. If you change your mind, the choreographed routine on the float is the visual centerpiece of our section, classes are free, and there's a drink with the crew after each one. Reply to this email and we'll add you.
         </p>`;
 
   const html = `<!doctype html>
@@ -295,7 +295,7 @@ function renderConfirmationEmail(data: ConfirmationData) {
     "",
     rehearsalLines
       ? `Dance rehearsals you signed up for:\n${rehearsalLines}\n\nRehearsals at ${REHEARSAL_VENUE.name}, ${REHEARSAL_VENUE.address}. Arrive 5:45pm so we can get you into the building. Drinks with the crew after!`
-      : "You haven't opted in to dance rehearsals — let us know if you change your mind! The routine on the float is the visual centrepiece of our section.",
+      : "You haven't opted in to dance rehearsals — let us know if you change your mind! The routine on the float is the visual centerpiece of our section.",
     "",
     "What's next:",
     "• Assembly time + exact meeting point: as soon as NYC Pride confirms.",

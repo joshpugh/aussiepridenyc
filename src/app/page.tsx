@@ -158,7 +158,7 @@ export default async function Home() {
             </Faq>
             <Faq q="Do I have to come to dance rehearsals?">
               You don&rsquo;t <em>have</em> to — but you&rsquo;ll want to. The
-              choreographed routine on the float is the visual centrepiece of
+              choreographed routine on the float is the visual centerpiece of
               our section, and rehearsals are how it comes together. Classes
               are free, the choreographer is Broadway-credited, there&rsquo;s
               a drink with the crew after each one, and you&rsquo;ll spend
