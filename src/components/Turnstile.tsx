@@ -26,6 +26,7 @@ export function Turnstile({ sitekey }: { sitekey: string | undefined }) {
       widgetIdRef.current = window.turnstile.render(ref.current, {
         sitekey,
         appearance: "interaction-only",
+        theme: "light",
       });
       clearInterval(interval);
     }, 200);
