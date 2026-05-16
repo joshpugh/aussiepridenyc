@@ -1,8 +1,7 @@
 import { IconBackdrop } from "./IconBackdrop";
 import { EVENT } from "@/config/event";
 
-export function Hero({ marchCount, marchCap }: { marchCount: number; marchCap: number }) {
-  const remaining = Math.max(marchCap - marchCount, 0);
+export function Hero() {
   return (
     <section className="relative bg-aussie-gradient grain overflow-hidden">
       <IconBackdrop />
@@ -46,11 +45,6 @@ export function Hero({ marchCount, marchCap }: { marchCount: number; marchCap: n
             Tell me more →
           </a>
         </div>
-        {remaining < marchCap && remaining > 0 && (
-          <p className="mt-8 text-white/90 text-sm">
-            {remaining} of {marchCap} spots left
-          </p>
-        )}
       </div>
     </section>
   );

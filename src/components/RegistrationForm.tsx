@@ -74,7 +74,7 @@ export function RegistrationForm({
       <div className="space-y-1">
         <h3 className="font-serif text-3xl sm:text-4xl text-pink-dark leading-tight">Register to march</h3>
         <p className="text-sm text-foreground/70">
-          Spots are strictly limited. Registration closes 1 May 2026 (or when we hit our cap).
+          Spots are strictly limited. Registration closes 9 June 2026 (or when we hit our cap).
         </p>
       </div>
 
@@ -142,13 +142,8 @@ export function RegistrationForm({
         <div className="space-y-2">
           {REHEARSALS.map((r) => {
             const count = rehearsalCounts[r.id] ?? 0;
-            const remaining = Math.max(rehearsalCap - count, 0);
-            const tone =
-              remaining === 0
-                ? "Waitlist"
-                : remaining <= 10
-                  ? `${remaining} spots left`
-                  : null;
+            const isFull = count >= rehearsalCap;
+            const tone = isFull ? "Waitlist" : null;
             return (
               <label
                 key={r.id}
