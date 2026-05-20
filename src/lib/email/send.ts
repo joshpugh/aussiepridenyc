@@ -1,6 +1,12 @@
 import { Resend } from "resend";
 import { REHEARSALS, REHEARSAL_VENUE, EVENT } from "@/config/event";
 import type { RehearsalDate } from "@/lib/db/schema";
+import {
+  buildIcsMultiple,
+  getMarchCalendarEvent,
+  getRehearsalCalendarEvent,
+  type CalendarEvent,
+} from "@/lib/calendar/ics";
 
 let _resend: Resend | null = null;
 function getResend() {
@@ -47,6 +53,35 @@ export async function sendRegistrantConfirmation(data: ConfirmationData) {
 
   const { html, text } = renderConfirmationEmail(data);
 
+  // Calendar attachment: combined .ics with one VEVENT per confirmed event.
+  // Apple Mail / Outlook / Gmail surface this as an inline "Add to Calendar"
+  // prompt without the recipient having to click a download link.
+  // Waitlist-only confirmations get no attachment (nothing to add yet).
+  const confirmedEvents: CalendarEvent[] = [];
+  if (data.marchStatus === "confirmed") {
+    confirmedEvents.push(getMarchCalendarEvent());
+    for (const r of data.rehearsals) {
+      if (r.status === "confirmed") {
+        const ev = getRehearsalCalendarEvent(r.date);
+        if (ev) confirmedEvents.push(ev);
+      }
+    }
+  }
+
+  const attachments =
+    confirmedEvents.length > 0
+      ? [
+          {
+            filename: "aussie-pride-nyc.ics",
+            content: Buffer.from(
+              buildIcsMultiple(confirmedEvents),
+              "utf8",
+            ).toString("base64"),
+            contentType: "text/calendar; charset=utf-8; method=PUBLISH",
+          },
+        ]
+      : undefined;
+
   const { error } = await resend.emails.send({
     from: fromAddress(),
     to: data.email,
@@ -55,6 +90,7 @@ export async function sendRegistrantConfirmation(data: ConfirmationData) {
     html,
     text,
     replyTo: EVENT.contactEmail,
+    attachments,
   });
 
   if (error) return { sent: false as const, reason: error.message };
