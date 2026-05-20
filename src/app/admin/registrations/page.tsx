@@ -1,4 +1,4 @@
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { requireAdmin } from "@/lib/auth/admin";
 import { db } from "@/lib/db";
 import { registrations, rehearsalSignups } from "@/lib/db/schema";
@@ -6,6 +6,8 @@ import { REHEARSALS, CAPS } from "@/config/event";
 import { getCounts } from "@/lib/registrations";
 import { destroySession } from "@/lib/auth/admin";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { DeleteRegistrationButton } from "@/components/admin/DeleteRegistrationButton";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +15,18 @@ async function logoutAction() {
   "use server";
   await destroySession();
   redirect("/admin/login");
+}
+
+async function deleteRegistrationAction(formData: FormData) {
+  "use server";
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "").trim();
+  if (!id) return;
+  // ON DELETE CASCADE on rehearsal_signups.registration_id removes the
+  // rehearsal rows automatically — no need to delete those manually.
+  await db.delete(registrations).where(eq(registrations.id, id));
+  revalidatePath("/admin/registrations");
+  revalidatePath("/");
 }
 
 export default async function RegistrationsPage() {
@@ -81,6 +95,7 @@ export default async function RegistrationsPage() {
               <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Rehearsals</th>
               <th className="px-4 py-3">Registered</th>
+              <th className="px-4 py-3"></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-100">
@@ -121,12 +136,20 @@ export default async function RegistrationsPage() {
                       minute: "2-digit",
                     })}
                   </td>
+                  <td className="px-4 py-3 text-right">
+                    <DeleteRegistrationButton
+                      id={r.id}
+                      name={r.name}
+                      email={r.email}
+                      action={deleteRegistrationAction}
+                    />
+                  </td>
                 </tr>
               );
             })}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-12 text-center text-foreground/50">
+                <td colSpan={7} className="px-4 py-12 text-center text-foreground/50">
                   No registrations yet.
                 </td>
               </tr>

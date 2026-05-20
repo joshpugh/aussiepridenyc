@@ -143,21 +143,30 @@ function renderConfirmationEmail(data: ConfirmationData) {
     })
     .filter((r): r is NonNullable<typeof r> => r !== null);
 
+  const confirmedRehearsals = optedInRehearsals.filter(
+    (r) => r.status === "confirmed",
+  );
+  const waitlistedRehearsals = optedInRehearsals.filter(
+    (r) => r.status === "waitlist",
+  );
+
   // -- HTML ---------------------------------------------------------------
 
-  const rehearsalsHtmlBlock =
-    optedInRehearsals.length > 0
+  const sectionH3 = `font-family: Georgia, 'Times New Roman', serif; color: ${COLOR.pinkDark}; font-size: 22px; font-weight: 600;`;
+  const rehearsalLi = `padding: 12px 16px; border-radius: 12px; background: ${COLOR.cream}; margin-bottom: 8px; font-size: 15px; color: ${COLOR.text};`;
+
+  const confirmedRehearsalsHtml =
+    confirmedRehearsals.length > 0
       ? `
-        <h3 style="margin: 0 0 12px; font-family: Georgia, 'Times New Roman', serif; color: ${COLOR.pinkDark}; font-size: 22px; font-weight: 600;">
-          Dance rehearsals you signed up for
+        <h3 style="margin: 0 0 12px; ${sectionH3}">
+          Dance rehearsals you&rsquo;re booked for
         </h3>
         <ul style="margin: 0 0 12px; padding: 0; list-style: none;">
-          ${optedInRehearsals
+          ${confirmedRehearsals
             .map(
               (r) => `
-            <li style="padding: 12px 16px; border-radius: 12px; background: ${COLOR.cream}; margin-bottom: 8px; font-size: 15px; color: ${COLOR.text};">
+            <li style="${rehearsalLi}">
               <strong>${escape(r.label)}</strong> · ${escape(r.time)}
-              ${r.status === "waitlist" ? `<span style="display:inline-block; margin-left:8px; padding:2px 8px; border-radius:999px; background:${COLOR.pinkDark}; color:white; font-size:12px; font-weight:600;">Waitlist</span>` : ""}
               <div style="color: ${COLOR.textMuted}; font-size: 13px; margin-top: 4px;">
                 Arrive ${escape(r.arriveBy)} — ${escape(REHEARSAL_VENUE.name)}
               </div>
@@ -165,16 +174,134 @@ function renderConfirmationEmail(data: ConfirmationData) {
             )
             .join("")}
         </ul>
-        <p style="margin: 0 0 8px; font-size: 14px; color: ${COLOR.textMuted}; line-height: 1.5;">
+        <p style="margin: 0 0 24px; font-size: 14px; color: ${COLOR.textMuted}; line-height: 1.5;">
           ${escape(REHEARSAL_VENUE.address)}. Please arrive 15 minutes early so we can get you into the building before the 6pm start. Stick around for a drink with the crew after.
         </p>`
-      : `
-        <h3 style="margin: 0 0 8px; font-family: Georgia, 'Times New Roman', serif; color: ${COLOR.pinkDark}; font-size: 22px; font-weight: 600;">
+      : "";
+
+  const waitlistedRehearsalsHtml =
+    waitlistedRehearsals.length > 0
+      ? `
+        <h3 style="margin: 0 0 12px; ${sectionH3}">
+          Dance rehearsals — you&rsquo;re on the waitlist
+        </h3>
+        <ul style="margin: 0 0 12px; padding: 0; list-style: none;">
+          ${waitlistedRehearsals
+            .map(
+              (r) => `
+            <li style="${rehearsalLi}">
+              <strong>${escape(r.label)}</strong> · ${escape(r.time)}
+              <span style="display:inline-block; margin-left:8px; padding:2px 8px; border-radius:999px; background:${COLOR.pinkDark}; color:white; font-size:12px; font-weight:600;">Waitlist</span>
+            </li>`,
+            )
+            .join("")}
+        </ul>
+        <p style="margin: 0 0 24px; font-size: 14px; color: ${COLOR.textMuted}; line-height: 1.5;">
+          ${
+            confirmedRehearsals.length > 0
+              ? "These dates are at capacity. We&rsquo;ll email you straight away if a spot opens up."
+              : "These dates are at capacity, so you&rsquo;re on the waitlist for each. We&rsquo;ll email straight away if a spot opens up."
+          }
+        </p>`
+      : "";
+
+  const noRehearsalsHtml =
+    !isWaitlist && optedInRehearsals.length === 0
+      ? `
+        <h3 style="margin: 0 0 8px; ${sectionH3}">
           Dance rehearsals
         </h3>
-        <p style="margin: 0; font-size: 15px; color: ${COLOR.text}; line-height: 1.5;">
-          You didn't opt in to rehearsals — no worries. If you change your mind, the choreographed routine on the float is the visual centerpiece of our section, classes are free, and there's a drink with the crew after each one. Reply to this email and we'll add you.
-        </p>`;
+        <p style="margin: 0 0 24px; font-size: 15px; color: ${COLOR.text}; line-height: 1.5;">
+          You didn&rsquo;t opt in to rehearsals — no worries. If you change your mind, the choreographed routine on the float is the visual centerpiece of our section, classes are free, and there&rsquo;s a drink with the crew after each one. Reply to this email and we&rsquo;ll add you.
+        </p>`
+      : "";
+
+  const rehearsalsHtmlBlock = isWaitlist
+    ? ""
+    : `${confirmedRehearsalsHtml}${waitlistedRehearsalsHtml}${noRehearsalsHtml}`;
+
+  // -- Calendar block -----------------------------------------------------
+  // Only confirmed events get a calendar link. Marchwaitlisters get none
+  // (their march status is "waitlist" so we skip the block entirely).
+
+  const calendarItems: { label: string; url: string }[] = [];
+  if (!isWaitlist) {
+    calendarItems.push({
+      label: `NYC Pride March · ${EVENT.date}`,
+      url: `${SITE_URL}/calendar/march.ics`,
+    });
+    for (const r of confirmedRehearsals) {
+      calendarItems.push({
+        label: `Dance rehearsal · ${r.label}, ${r.time}`,
+        url: `${SITE_URL}/calendar/rehearsal-${r.id}.ics`,
+      });
+    }
+  }
+
+  const calendarHtmlBlock =
+    calendarItems.length > 0
+      ? `
+        <div style="margin: 28px 0 0; padding: 20px 22px; background: ${COLOR.cream}; border-radius: 16px;">
+          <h3 style="margin: 0 0 14px; ${sectionH3}">
+            Add to your calendar
+          </h3>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            ${calendarItems
+              .map(
+                (c) => `
+              <tr>
+                <td style="padding: 6px 0;">
+                  <a href="${c.url}" style="display: inline-block; color: ${COLOR.pinkDark}; text-decoration: none; font-size: 15px; font-weight: 600;">
+                    📅 ${escape(c.label)}
+                  </a>
+                </td>
+              </tr>`,
+              )
+              .join("")}
+          </table>
+          <p style="margin: 12px 0 0; font-size: 12px; color: ${COLOR.textMuted}; line-height: 1.5;">
+            Clicking each link downloads an .ics file that Apple Calendar, Google Calendar and Outlook will import.
+          </p>
+        </div>`
+      : "";
+
+  // -- What happens next --------------------------------------------------
+
+  const whatsNextItems: string[] = [];
+  if (isWaitlist) {
+    whatsNextItems.push(
+      "If a spot opens up we&rsquo;ll email you straight away to grab the rest of your details — phone, t-shirt size, and rehearsal opt-in.",
+      `Want to bring a mate? Send them <a href="${SITE_URL}" style="color: ${COLOR.pinkDark}; text-decoration: underline;">aussiepridenyc.com</a> — every marcher needs to register individually.`,
+    );
+  } else {
+    whatsNextItems.push(
+      "We&rsquo;ll email the assembly time and exact meeting point as soon as NYC Pride confirms (usually a few weeks out).",
+      "T-shirt design reveal + the song you&rsquo;ll be dancing to: coming closer to the day.",
+    );
+    if (confirmedRehearsals.length > 0) {
+      whatsNextItems.push(
+        "Show up to your rehearsals — that&rsquo;s where the choreographed routine on the float comes together.",
+      );
+    }
+    if (waitlistedRehearsals.length > 0) {
+      whatsNextItems.push(
+        "For the rehearsals you&rsquo;re waitlisted for: if a spot frees up, we&rsquo;ll email you that day.",
+      );
+    }
+    whatsNextItems.push(
+      `Want to bring a mate? Send them <a href="${SITE_URL}" style="color: ${COLOR.pinkDark}; text-decoration: underline;">aussiepridenyc.com</a> — every marcher needs to register individually.`,
+    );
+  }
+
+  const whatsNextHtmlBlock = `
+              <div style="margin-top: 32px; padding-top: 28px; border-top: 1px solid rgba(214, 28, 117, 0.12);">
+                <h3 style="margin: 0 0 12px; ${sectionH3}">
+                  What happens next
+                </h3>
+                <ul style="margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.6; color: ${COLOR.text};">
+                  ${whatsNextItems.map((item) => `<li>${item}</li>`).join("")}
+                </ul>
+              </div>`;
 
   const html = `<!doctype html>
 <html lang="en">
@@ -235,20 +362,14 @@ function renderConfirmationEmail(data: ConfirmationData) {
                   : ""
               }
 
-              <!-- Rehearsals block -->
-              ${data.tshirtSize ? rehearsalsHtmlBlock : ""}
+              <!-- Rehearsals block (split confirmed vs waitlisted) -->
+              ${rehearsalsHtmlBlock}
 
-              <!-- What's next -->
-              <div style="margin-top: 32px; padding-top: 28px; border-top: 1px solid rgba(214, 28, 117, 0.12);">
-                <h3 style="margin: 0 0 12px; font-family: Georgia, 'Times New Roman', serif; color: ${COLOR.pinkDark}; font-size: 22px; font-weight: 600;">
-                  What happens next
-                </h3>
-                <ul style="margin: 0 0 0 0; padding-left: 20px; font-size: 15px; line-height: 1.6; color: ${COLOR.text};">
-                  <li>We'll email the assembly time and exact meeting point as soon as NYC Pride confirms (usually a few weeks out).</li>
-                  <li>T-shirt design reveal + the song you'll be dancing to: coming closer to the day.</li>
-                  <li>Want to bring a mate? Send them <a href="${SITE_URL}" style="color: ${COLOR.pinkDark}; text-decoration: underline;">aussiepridenyc.com</a> — every marcher needs to register individually.</li>
-                </ul>
-              </div>
+              <!-- Add to calendar (confirmed events only) -->
+              ${calendarHtmlBlock}
+
+              <!-- What's next (branched by outcome) -->
+              ${whatsNextHtmlBlock}
 
               <!-- CTA -->
               <div style="margin-top: 36px; text-align: center;">
@@ -283,39 +404,94 @@ function renderConfirmationEmail(data: ConfirmationData) {
 
   // -- Text fallback ------------------------------------------------------
 
-  const rehearsalLines = optedInRehearsals
-    .map((r) => {
-      const tag = r.status === "waitlist" ? " (waitlist — we'll be in touch)" : "";
-      return `• ${r.label}, ${r.time}${tag}`;
-    })
-    .join("\n");
-
-  const text = [
+  const textChunks: string[] = [
     `G'day ${firstName},`,
     "",
-    subhead,
+    subhead.replace(/&rsquo;/g, "’"),
     "",
-    data.tshirtSize
-      ? `T-shirt size: ${data.tshirtSize} (free, mandatory per NYC Pride — we'll get this to you on march day).`
-      : "",
-    data.tshirtSize
-      ? (rehearsalLines
-          ? `Dance rehearsals you signed up for:\n${rehearsalLines}\n\nRehearsals at ${REHEARSAL_VENUE.name}, ${REHEARSAL_VENUE.address}. Arrive 5:45pm so we can get you into the building. Drinks with the crew after!`
-          : "You haven't opted in to dance rehearsals — let us know if you change your mind! The routine on the float is the visual centerpiece of our section.")
-      : "If a spot opens up we'll email you to grab the rest of your details — phone, t-shirt size, and rehearsal opt-in.",
-    "",
-    "What's next:",
-    "• Assembly time + exact meeting point: as soon as NYC Pride confirms.",
-    "• T-shirt design + song reveal: closer to the day.",
-    `• Bringing a mate? Send them ${SITE_URL} — every marcher registers individually.`,
+  ];
+
+  if (data.tshirtSize) {
+    textChunks.push(
+      `T-shirt size: ${data.tshirtSize} (free, mandatory per NYC Pride — we'll get this to you on march day).`,
+      "",
+    );
+  }
+
+  if (!isWaitlist) {
+    if (confirmedRehearsals.length > 0) {
+      textChunks.push("Dance rehearsals you're booked for:");
+      for (const r of confirmedRehearsals) {
+        textChunks.push(`• ${r.label}, ${r.time}`);
+      }
+      textChunks.push(
+        `Rehearsals at ${REHEARSAL_VENUE.name}, ${REHEARSAL_VENUE.address}. Arrive 5:45pm. Drinks after.`,
+        "",
+      );
+    }
+    if (waitlistedRehearsals.length > 0) {
+      textChunks.push("Dance rehearsals you're on the waitlist for:");
+      for (const r of waitlistedRehearsals) {
+        textChunks.push(`• ${r.label}, ${r.time} (waitlist)`);
+      }
+      textChunks.push(
+        "These dates are at capacity. We'll email straight away if a spot opens up.",
+        "",
+      );
+    }
+    if (optedInRehearsals.length === 0) {
+      textChunks.push(
+        "You didn't opt in to dance rehearsals — let us know if you change your mind! The routine on the float is the visual centerpiece of our section.",
+        "",
+      );
+    }
+
+    // Calendar links (only for confirmed events).
+    const calLinks: string[] = [];
+    calLinks.push(`NYC Pride March: ${SITE_URL}/calendar/march.ics`);
+    for (const r of confirmedRehearsals) {
+      calLinks.push(
+        `Rehearsal ${r.label}: ${SITE_URL}/calendar/rehearsal-${r.id}.ics`,
+      );
+    }
+    textChunks.push("Add to your calendar (.ics files):", ...calLinks, "");
+  }
+
+  textChunks.push("What's next:");
+  if (isWaitlist) {
+    textChunks.push(
+      "• If a spot opens up we'll email you straight away to grab the rest of your details (phone, t-shirt size, rehearsal opt-in).",
+      `• Bringing a mate? Send them ${SITE_URL} — every marcher registers individually.`,
+    );
+  } else {
+    textChunks.push(
+      "• Assembly time + exact meeting point: as soon as NYC Pride confirms.",
+      "• T-shirt design + song reveal: closer to the day.",
+    );
+    if (confirmedRehearsals.length > 0) {
+      textChunks.push(
+        "• Show up to your rehearsals — that's where the choreographed routine on the float comes together.",
+      );
+    }
+    if (waitlistedRehearsals.length > 0) {
+      textChunks.push(
+        "• For the rehearsals you're waitlisted for: if a spot frees up, we'll email you that day.",
+      );
+    }
+    textChunks.push(
+      `• Bringing a mate? Send them ${SITE_URL} — every marcher registers individually.`,
+    );
+  }
+
+  textChunks.push(
     "",
     "Cheers,",
     "Aussie Pride NYC",
     "",
     `Questions? ${EVENT.contactEmail}`,
-  ]
-    .filter(Boolean)
-    .join("\n");
+  );
+
+  const text = textChunks.join("\n");
 
   return { html, text };
 }
