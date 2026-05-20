@@ -1,5 +1,6 @@
 import { Hero } from "@/components/Hero";
 import { RegistrationForm } from "@/components/RegistrationForm";
+import { WaitlistForm } from "@/components/WaitlistForm";
 import { getCounts } from "@/lib/registrations";
 import { REHEARSALS, REHEARSAL_VENUE, EVENT } from "@/config/event";
 
@@ -60,7 +61,7 @@ export default async function Home() {
             a special guest or two.
           </p>
           <p className="text-lg text-foreground/80 leading-relaxed">
-            Spots are capped at 200 per NYC Pride. Register your interest below
+            Spots are capped at 250 per NYC Pride. Register your interest below
             to secure yours.
           </p>
         </div>
@@ -101,11 +102,15 @@ export default async function Home() {
 
       <section id="register" className="bg-white scroll-mt-8">
         <div className="max-w-2xl mx-auto px-6 py-20">
-          <RegistrationForm
-            turnstileSitekey={sitekey}
-            rehearsalCounts={counts.rehearsals}
-            rehearsalCap={counts.rehearsalCap}
-          />
+          {counts.march >= counts.marchCap ? (
+            <WaitlistForm turnstileSitekey={sitekey} />
+          ) : (
+            <RegistrationForm
+              turnstileSitekey={sitekey}
+              rehearsalCounts={counts.rehearsals}
+              rehearsalCap={counts.rehearsalCap}
+            />
+          )}
         </div>
       </section>
 
@@ -167,7 +172,7 @@ export default async function Home() {
             </Faq>
             <Faq q="Can I bring friends?">
               Absolutely — every friend needs to register individually so we can
-              count them toward our 200-person cap and get them a t-shirt in their
+              count them toward our 250-person cap and get them a t-shirt in their
               size.
             </Faq>
             <Faq q="Do I have to be Australian?">

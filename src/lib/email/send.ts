@@ -132,7 +132,7 @@ function renderConfirmationEmail(data: ConfirmationData) {
     : `You're in, ${firstName}!`;
 
   const subhead = isWaitlist
-    ? "We've hit our 200-marcher cap. We'll be in touch the moment a spot opens up."
+    ? "We've hit our 250-marcher cap. We'll be in touch the moment a spot opens up."
     : `You're officially registered to march with the Aussie contingent at NYC Pride on ${EVENT.date}.`;
 
   const optedInRehearsals = data.rehearsals
@@ -214,7 +214,9 @@ function renderConfirmationEmail(data: ConfirmationData) {
                 ${escape(subhead)}
               </p>
 
-              <!-- T-shirt callout -->
+              ${
+                data.tshirtSize
+                  ? `<!-- T-shirt callout -->
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0 0 28px; background: ${COLOR.cream}; border-radius: 16px;">
                 <tr>
                   <td style="padding: 18px 20px;">
@@ -229,10 +231,12 @@ function renderConfirmationEmail(data: ConfirmationData) {
                     </div>
                   </td>
                 </tr>
-              </table>
+              </table>`
+                  : ""
+              }
 
               <!-- Rehearsals block -->
-              ${rehearsalsHtmlBlock}
+              ${data.tshirtSize ? rehearsalsHtmlBlock : ""}
 
               <!-- What's next -->
               <div style="margin-top: 32px; padding-top: 28px; border-top: 1px solid rgba(214, 28, 117, 0.12);">
@@ -291,11 +295,14 @@ function renderConfirmationEmail(data: ConfirmationData) {
     "",
     subhead,
     "",
-    `T-shirt size: ${data.tshirtSize} (free, mandatory per NYC Pride — we'll get this to you on march day).`,
-    "",
-    rehearsalLines
-      ? `Dance rehearsals you signed up for:\n${rehearsalLines}\n\nRehearsals at ${REHEARSAL_VENUE.name}, ${REHEARSAL_VENUE.address}. Arrive 5:45pm so we can get you into the building. Drinks with the crew after!`
-      : "You haven't opted in to dance rehearsals — let us know if you change your mind! The routine on the float is the visual centerpiece of our section.",
+    data.tshirtSize
+      ? `T-shirt size: ${data.tshirtSize} (free, mandatory per NYC Pride — we'll get this to you on march day).`
+      : "",
+    data.tshirtSize
+      ? (rehearsalLines
+          ? `Dance rehearsals you signed up for:\n${rehearsalLines}\n\nRehearsals at ${REHEARSAL_VENUE.name}, ${REHEARSAL_VENUE.address}. Arrive 5:45pm so we can get you into the building. Drinks with the crew after!`
+          : "You haven't opted in to dance rehearsals — let us know if you change your mind! The routine on the float is the visual centerpiece of our section.")
+      : "If a spot opens up we'll email you to grab the rest of your details — phone, t-shirt size, and rehearsal opt-in.",
     "",
     "What's next:",
     "• Assembly time + exact meeting point: as soon as NYC Pride confirms.",

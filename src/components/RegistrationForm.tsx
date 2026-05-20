@@ -242,7 +242,7 @@ function SuccessPanel({
       </h3>
       <p className="text-foreground/80">
         {state.marchStatus === "waitlist"
-          ? "We've hit our 200-marcher cap. We'll be in touch if a spot opens up."
+          ? "We've hit our 250-marcher cap. We'll be in touch if a spot opens up."
           : "Check your email for confirmation. We'll send updates as we lock in the song, t-shirt design, and parade-day details."}
       </p>
       {state.rehearsals.length > 0 && (

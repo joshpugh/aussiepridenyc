@@ -88,6 +88,6 @@ export const TSHIRT_OPTIONS = [
 ] as const;
 
 export const CAPS = {
-  march: Number(process.env.MARCH_CAP ?? 200),
-  rehearsal: Number(process.env.REHEARSAL_CAP ?? 50),
+  march: Number(process.env.MARCH_CAP ?? 250),
+  rehearsal: Number(process.env.REHEARSAL_CAP ?? 100),
 };

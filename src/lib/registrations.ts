@@ -121,3 +121,48 @@ export async function markConfirmationSent(id: string) {
     .set({ confirmationSentAt: new Date() })
     .where(and(eq(registrations.id, id)));
 }
+
+export type WaitlistInput = { name: string; email: string };
+export type WaitlistResult =
+  | { ok: true; id: string }
+  | { ok: false; error: string };
+
+/**
+ * Minimal name+email registration used when the march cap is already hit.
+ * Phone and t-shirt size are stored as empty strings — admins collect them
+ * later if a spot opens up. Status is always 'waitlist'.
+ */
+export async function createWaitlistEntry(
+  input: WaitlistInput,
+): Promise<WaitlistResult> {
+  const email = input.email.trim().toLowerCase();
+
+  if (!input.name.trim()) return { ok: false, error: "Name is required." };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    return { ok: false, error: "Please enter a valid email." };
+
+  const existing = await db
+    .select({ id: registrations.id })
+    .from(registrations)
+    .where(eq(registrations.email, email))
+    .limit(1);
+  if (existing[0]) {
+    return {
+      ok: false,
+      error:
+        "This email is already registered. Please email us if you'd like to update your details.",
+    };
+  }
+
+  const id = randomUUID();
+  await db.insert(registrations).values({
+    id,
+    name: input.name.trim(),
+    email,
+    phone: "",
+    tshirtSize: "",
+    status: "waitlist",
+  });
+
+  return { ok: true, id };
+}
