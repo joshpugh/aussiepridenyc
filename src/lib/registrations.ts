@@ -17,6 +17,13 @@ export type RegistrationInput = {
   phone: string;
   tshirtSize: TshirtSize;
   rehearsals: RehearsalDate[];
+  /**
+   * Preview-only override: rehearsal dates that should be forced into
+   * status='waitlist' regardless of real count. Pass-through from
+   * ?rehearsalsFull URL param so the success state + email render the
+   * waitlist outcome end-to-end. Safe to leave undefined / empty in prod.
+   */
+  forceWaitlistDates?: RehearsalDate[];
 };
 
 export async function getMarchCount(): Promise<number> {
@@ -97,11 +104,13 @@ export async function createRegistration(input: RegistrationInput): Promise<Crea
   });
 
   const rehearsalCounts = await getRehearsalCounts();
+  const forceSet = new Set(input.forceWaitlistDates ?? []);
   const rehearsalResults: { date: RehearsalDate; status: "confirmed" | "waitlist" }[] = [];
   for (const date of rehearsals) {
     const count = rehearsalCounts[date] ?? 0;
+    const forced = forceSet.has(date);
     const status: "confirmed" | "waitlist" =
-      count >= CAPS.rehearsal ? "waitlist" : "confirmed";
+      forced || count >= CAPS.rehearsal ? "waitlist" : "confirmed";
     await db.insert(rehearsalSignups).values({
       id: randomUUID(),
       registrationId: id,

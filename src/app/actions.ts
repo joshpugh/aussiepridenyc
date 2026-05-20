@@ -72,12 +72,25 @@ export async function registerAction(
       REHEARSAL_DATES.includes(v as RehearsalDate),
     );
 
+  // Preview-only: ?rehearsalsFull=DATE,... gets surfaced into the form as a
+  // hidden field, and we honour it server-side so success state + email both
+  // reflect the waitlist outcome. No effect when the field is absent.
+  const forceWaitlistRehearsals = String(
+    formData.get("forceWaitlistRehearsals") ?? "",
+  )
+    .split(",")
+    .map((s) => s.trim())
+    .filter((v): v is RehearsalDate =>
+      REHEARSAL_DATES.includes(v as RehearsalDate),
+    );
+
   const result = await createRegistration({
     name,
     email,
     phone,
     tshirtSize,
     rehearsals,
+    forceWaitlistDates: forceWaitlistRehearsals,
   });
 
   if (!result.ok) {

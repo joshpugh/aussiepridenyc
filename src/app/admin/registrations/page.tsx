@@ -34,7 +34,7 @@ export default async function RegistrationsPage() {
     <div className="space-y-8">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="font-display text-3xl text-pink-dark">Registrations</h1>
+          <h1 className="font-serif text-3xl text-pink-dark">Registrations</h1>
           <p className="text-sm text-foreground/70 mt-1">
             {rows.length} total · {counts.march} confirmed marchers (cap {CAPS.march})
           </p>
@@ -60,7 +60,7 @@ export default async function RegistrationsPage() {
           return (
             <div key={r.id} className="bg-white border border-zinc-200 rounded-2xl p-4">
               <p className="text-sm text-foreground/60">{r.label}</p>
-              <p className="font-display text-2xl text-pink-dark mt-1">
+              <p className="font-serif text-3xl text-pink-dark mt-1">
                 {count}
                 <span className="text-sm text-foreground/60 font-normal">
                   /{CAPS.rehearsal}

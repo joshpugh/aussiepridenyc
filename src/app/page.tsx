@@ -151,6 +151,7 @@ export default async function Home({
               turnstileSitekey={sitekey}
               rehearsalCounts={effectiveRehearsalCounts}
               rehearsalCap={counts.rehearsalCap}
+              forceWaitlistRehearsals={previewRehearsalsFull}
             />
           )}
         </div>

@@ -54,10 +54,13 @@ export function RegistrationForm({
   turnstileSitekey,
   rehearsalCounts,
   rehearsalCap,
+  forceWaitlistRehearsals = [],
 }: {
   turnstileSitekey: string | undefined;
   rehearsalCounts: Record<string, number>;
   rehearsalCap: number;
+  /** Preview-only: dates to force into waitlist status server-side. */
+  forceWaitlistRehearsals?: string[];
 }) {
   const [state, formAction] = useActionState(registerAction, initialState);
   const [phone, setPhone] = useState("");
@@ -185,6 +188,14 @@ export function RegistrationForm({
           />
         </label>
       </div>
+
+      {forceWaitlistRehearsals.length > 0 && (
+        <input
+          type="hidden"
+          name="forceWaitlistRehearsals"
+          value={forceWaitlistRehearsals.join(",")}
+        />
+      )}
 
       <Turnstile sitekey={turnstileSitekey} />
 

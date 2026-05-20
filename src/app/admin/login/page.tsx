@@ -22,7 +22,7 @@ export default async function LoginPage({
   const params = await searchParams;
   return (
     <div className="max-w-sm mx-auto bg-white rounded-2xl shadow-sm border border-zinc-200 p-8">
-      <h1 className="font-display text-2xl text-pink-dark mb-1">Admin login</h1>
+      <h1 className="font-serif text-2xl text-pink-dark mb-1">Admin login</h1>
       <p className="text-sm text-foreground/70 mb-6">
         Enter the admin password to manage registrations.
       </p>
@@ -42,7 +42,7 @@ export default async function LoginPage({
         )}
         <button
           type="submit"
-          className="w-full font-display uppercase tracking-wider bg-pink-dark text-white py-3 rounded-full hover:bg-pink transition-colors"
+          className="w-full text-sm font-semibold uppercase tracking-wider bg-pink-dark text-white py-3 rounded-full hover:bg-pink transition-colors"
         >
           Log in
         </button>
