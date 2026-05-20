@@ -25,13 +25,14 @@ export async function GET() {
     db.select().from(rehearsalSignups),
   ]);
 
-  const byReg = new Map<string, Set<string>>();
+  // Per-registration map of rehearsal_date → status, so the CSV writes the
+  // actual status ("confirmed" / "waitlist") in each rehearsal column rather
+  // than a flat "yes".
+  const byReg = new Map<string, Map<string, string>>();
   for (const s of signups) {
-    if (s.status === "confirmed" || s.status === "waitlist") {
-      const set = byReg.get(s.registrationId) ?? new Set();
-      set.add(s.rehearsalDate);
-      byReg.set(s.registrationId, set);
-    }
+    const inner = byReg.get(s.registrationId) ?? new Map<string, string>();
+    inner.set(s.rehearsalDate, s.status);
+    byReg.set(s.registrationId, inner);
   }
 
   const headers = [
@@ -46,14 +47,14 @@ export async function GET() {
 
   const lines = [headers.map(csvField).join(",")];
   for (const r of rows) {
-    const dates = byReg.get(r.id) ?? new Set();
+    const byDate = byReg.get(r.id) ?? new Map<string, string>();
     const cells = [
       r.name,
       r.email,
       r.phone,
       r.tshirtSize,
       r.status,
-      ...REHEARSALS.map((rh) => (dates.has(rh.id) ? "yes" : "")),
+      ...REHEARSALS.map((rh) => byDate.get(rh.id) ?? ""),
       r.createdAt.toISOString(),
     ];
     lines.push(cells.map(csvField).join(","));

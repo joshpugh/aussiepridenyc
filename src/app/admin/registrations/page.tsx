@@ -37,11 +37,13 @@ export default async function RegistrationsPage() {
   ]);
   const signups = await db.select().from(rehearsalSignups);
 
-  const byReg = new Map<string, typeof signups>();
+  // Per-registration map of rehearsal_date → status. Lets us render the chips
+  // differently for confirmed vs waitlist signups.
+  const byReg = new Map<string, Map<string, string>>();
   for (const s of signups) {
-    const arr = byReg.get(s.registrationId) ?? [];
-    arr.push(s);
-    byReg.set(s.registrationId, arr);
+    const inner = byReg.get(s.registrationId) ?? new Map<string, string>();
+    inner.set(s.rehearsalDate, s.status);
+    byReg.set(s.registrationId, inner);
   }
 
   return (
@@ -70,16 +72,24 @@ export default async function RegistrationsPage() {
 
       <div className="grid sm:grid-cols-3 gap-4">
         {REHEARSALS.map((r) => {
-          const count = counts.rehearsals[r.id] ?? 0;
+          const confirmedCount = counts.rehearsals[r.id] ?? 0;
+          const waitlistCount = signups.filter(
+            (s) => s.rehearsalDate === r.id && s.status === "waitlist",
+          ).length;
           return (
             <div key={r.id} className="bg-white border border-zinc-200 rounded-2xl p-4">
               <p className="text-sm text-foreground/60">{r.label}</p>
               <p className="font-serif text-3xl text-pink-dark mt-1">
-                {count}
+                {confirmedCount}
                 <span className="text-sm text-foreground/60 font-normal">
                   /{CAPS.rehearsal}
                 </span>
               </p>
+              {waitlistCount > 0 && (
+                <p className="text-xs text-yellow-800 mt-1">
+                  + {waitlistCount} on waitlist
+                </p>
+              )}
             </div>
           );
         })}
@@ -100,8 +110,7 @@ export default async function RegistrationsPage() {
           </thead>
           <tbody className="divide-y divide-zinc-100">
             {rows.map((r) => {
-              const sigs = byReg.get(r.id) ?? [];
-              const dates = new Set(sigs.map((s) => s.rehearsalDate));
+              const byDate = byReg.get(r.id) ?? new Map<string, string>();
               return (
                 <tr key={r.id} className="hover:bg-zinc-50">
                   <td className="px-4 py-3 font-medium">{r.name}</td>
@@ -114,19 +123,30 @@ export default async function RegistrationsPage() {
                     <StatusPill status={r.status} />
                   </td>
                   <td className="px-4 py-3 text-xs">
-                    {REHEARSALS.map((rh) => (
-                      <span
-                        key={rh.id}
-                        className={`inline-block px-1.5 py-0.5 rounded mr-1 ${
-                          dates.has(rh.id)
-                            ? "bg-pink/15 text-pink-dark"
-                            : "bg-zinc-100 text-zinc-400"
-                        }`}
-                        title={rh.label}
-                      >
-                        {rh.label.split(" ")[1]}
-                      </span>
-                    ))}
+                    {REHEARSALS.map((rh) => {
+                      const status = byDate.get(rh.id);
+                      const tone =
+                        status === "confirmed"
+                          ? "bg-green-100 text-green-800"
+                          : status === "waitlist"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-zinc-100 text-zinc-400";
+                      const title = status
+                        ? `${rh.label} — ${status}`
+                        : `${rh.label} — not opted in`;
+                      return (
+                        <span
+                          key={rh.id}
+                          className={`inline-block px-1.5 py-0.5 rounded mr-1 ${tone}`}
+                          title={title}
+                        >
+                          {rh.label.split(" ")[1]}
+                          {status === "waitlist" && (
+                            <span className="ml-1 font-semibold">·W</span>
+                          )}
+                        </span>
+                      );
+                    })}
                   </td>
                   <td className="px-4 py-3 text-foreground/60 text-xs">
                     {r.createdAt.toLocaleString("en-US", {
