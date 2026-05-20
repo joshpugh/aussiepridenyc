@@ -1,6 +1,7 @@
 import { Hero } from "@/components/Hero";
 import { RegistrationForm } from "@/components/RegistrationForm";
 import { WaitlistForm } from "@/components/WaitlistForm";
+import { WelcomeConfetti } from "@/components/WelcomeConfetti";
 import { getCounts } from "@/lib/registrations";
 import { REHEARSALS, REHEARSAL_VENUE, EVENT } from "@/config/event";
 
@@ -89,6 +90,7 @@ export default async function Home({
         suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventLd) }}
       />
+      <WelcomeConfetti />
       <Hero />
 
       <section id="about" className="bg-white">
