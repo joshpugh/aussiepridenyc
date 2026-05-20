@@ -36,8 +36,50 @@ const eventLd = {
 
 export const dynamic = "force-dynamic";
 
-export default async function Home() {
+// ---------------------------------------------------------------------------
+// Preview overrides — append to the URL to test capacity states without
+// actually filling the database. Render-only; nothing is written to the DB.
+//
+//   ?marchFull=1
+//       Forces the simplified <WaitlistForm /> to render even if the march
+//       is not full yet.
+//
+//   ?rehearsalsFull=2026-06-10
+//   ?rehearsalsFull=2026-06-10,2026-06-17,2026-06-24
+//       Comma-separated rehearsal date IDs. Each listed date is treated as
+//       fully booked, so the corresponding card shows the "Waitlist" badge
+//       and any signup gets stored with status='waitlist'.
+//
+// Both can be combined freely.
+// ---------------------------------------------------------------------------
+
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const params = await searchParams;
+  const previewMarchFull = params.marchFull === "1";
+  const previewRehearsalsFull = (
+    typeof params.rehearsalsFull === "string"
+      ? params.rehearsalsFull.split(",")
+      : []
+  )
+    .map((s) => s.trim())
+    .filter(Boolean);
+
   const counts = await getCounts();
+
+  // Apply preview overrides on top of real counts.
+  const effectiveRehearsalCounts = { ...counts.rehearsals } as Record<
+    string,
+    number
+  >;
+  for (const date of previewRehearsalsFull) {
+    effectiveRehearsalCounts[date] = counts.rehearsalCap;
+  }
+  const marchIsFull = previewMarchFull || counts.march >= counts.marchCap;
+
   const sitekey = process.env.NEXT_PUBLIC_TURNSTILE_SITEKEY;
 
   return (
@@ -102,12 +144,12 @@ export default async function Home() {
 
       <section id="register" className="bg-white scroll-mt-8">
         <div className="max-w-2xl mx-auto px-6 py-20">
-          {counts.march >= counts.marchCap ? (
+          {marchIsFull ? (
             <WaitlistForm turnstileSitekey={sitekey} />
           ) : (
             <RegistrationForm
               turnstileSitekey={sitekey}
-              rehearsalCounts={counts.rehearsals}
+              rehearsalCounts={effectiveRehearsalCounts}
               rehearsalCap={counts.rehearsalCap}
             />
           )}
